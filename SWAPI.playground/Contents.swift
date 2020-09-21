@@ -16,23 +16,17 @@ class SwapiService {
     static let peopleEndpoint = "people/"
     
     static func fetchPerson(id: Int, completion: @escaping (Person?) -> Void) {
-      // 1 - Prepare URL
         guard let baseURL = baseURL else { return completion(nil)}
         let peopleURL = baseURL.appendingPathComponent(peopleEndpoint)
         let finalURL = peopleURL.appendingPathComponent("\(id)")
         print(finalURL)
-      // 2 - Contact server
         URLSession.shared.dataTask(with: finalURL) { (data, _, error) in
-            // 3 - Handle errors
             if let error = error {
                 print(error)
                 print(error.localizedDescription)
                 return completion(nil)
             }
-            // 4 - Check for data
             guard let data = data else { return completion(nil) }
-
-            // 5 - Decode Person from JSON
             do {
                 let decoder = JSONDecoder()
                 let person = try decoder.decode(Person.self, from: data)
@@ -48,7 +42,6 @@ class SwapiService {
     static func fetchFilm(url: URL, completion: @escaping (Film?) -> Void) {
         URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard let data = data else {return completion(nil) }
-            
             do {
                 let decoder = JSONDecoder()
                 let film = try decoder.decode(Film.self, from: data)
@@ -58,9 +51,7 @@ class SwapiService {
                 print(error.localizedDescription)
                 return completion(nil)
             }
-            
         }.resume()
- 
     }
 }
 
